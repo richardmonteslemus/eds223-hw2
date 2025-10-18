@@ -1,0 +1,7 @@
+---
+title: "EDS 223 Hw2"
+author: "Richard Montes Lemus"
+format: pdf
+editor: source
+date: "10/18/25"
+---
