@@ -93,9 +93,14 @@ ej_holc_per <- ej_holc %>%
 
 ```{r}
 # Create table for percent of census groups in each grade
-ej_holc_per_table <- ej_holc_per %>% 
-  gt()
-ej_holc_per_table
+
+ej_holc_per_table <- knitr::kable(
+  ej_holc_per,
+  col.names = c("HOLC Grade", "Percent of Group"),
+  caption = "Los Angeles Census Group by HOLC Grade Percent by ",
+  align = "c"
+)
+ej_holc_per_table 
 ```
 
 ### 3. Create visualizations for conditions
@@ -195,6 +200,7 @@ if(nrow(bird) == nrow(holc_bird)) {
 }
 
 ```
+
 ```{r}
 # Use stricter join to prevent duplicates
 holc_bird_within <- st_join(bird, holc, join = st_within)
