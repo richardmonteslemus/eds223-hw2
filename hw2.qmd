@@ -16,7 +16,7 @@ library(tmap)
 library(gt)
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, results='hide'}
 # Read in data 
 suppressMessages(ej <- st_read(here("data","ejscreen", "EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb")))
 
@@ -58,11 +58,11 @@ st_crs(ej) == st_crs(holc) & st_crs(ej) == st_crs(bird)
 tm_shape(holc) + 
   tm_polygons(fill = "grade", 
               fill.scale = tm_scale(values = c("darkgreen",
-                                               "lightgreen",
-                                               "#FCF4A3",
+                                               "lightblue",
+                                               "#FFC067",
                                                "#FA8072")), 
               fill.legend = tm_legend(title = "Grade")) + 
-  tm_title(text = "LA County Home Owners' Loan Corporation Grade") + 
+  tm_title(text = "LA County Home Owners' Loan Corporation HOLC Grade") + 
   tm_basemap() +
   tm_scalebar() + 
   tm_compass() 
@@ -97,7 +97,7 @@ ej_holc_per <- ej_holc %>%
 ej_holc_per_table <- knitr::kable(
   ej_holc_per,
   col.names = c("HOLC Grade", "Percent of Group"),
-  caption = "Los Angeles Census Group by HOLC Grade Percent by ",
+  caption = "Los Angeles Census Percent of Group by HOLC Grade",
   align = "c"
 )
 ej_holc_per_table 
@@ -119,13 +119,21 @@ if (any(holc_low_inc$inc_avg < 0 | holc_low_inc$inc_avg > 100)) {
 ```{r}
 # Observe income average difference between grades
 holc_low_inc %>% 
-ggplot(aes(x = grade, y = inc_avg)) +
-  geom_col(fill = "darkgreen") +
-  labs( x = "HOLC Grade", 
-        y = "Low Income Average (%)", 
-        title = "Average Low Income percentage by LA County HOLC Grade") + 
+  ggplot(aes(x = grade, y = inc_avg, fill = grade)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    "A" = "darkgreen",
+    "B" = "lightblue",
+    "C" = "#FFC067",
+    "D" = "#FA8072"))+
+  labs(
+    x = "HOLC Grade", 
+    y = "Low Income Average (%)", 
+    title = "Average Low Income percentage by LA County HOLC Grade",
+    fill = "HOLC Grade"
+  ) + 
   theme_classic()
-  
+
 ```
 
 ```{r}
@@ -143,12 +151,21 @@ if (any(holc_pm$pm_avg < 0 | holc_pm$pm_avg > 100)) {
 ```{r}
 # Observe percentile PM average difference between grades
 holc_pm %>% 
-ggplot(aes(x = grade, y = pm_avg)) +
-  geom_col(fill = "#4A3728") +
-  labs( x = "HOLC Grade", 
-        y = "PM 2.5 Percentile (%)", 
-        title = "Average PM2.5 Percentile by LA County HOLC Grade") + 
+  ggplot(aes(x = grade, y = pm_avg, fill = grade)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    "A" = "darkgreen",
+    "B" = "lightblue",
+    "C" = "#FFC067",
+    "D" = "#FA8072")) +
+  labs(
+    x = "HOLC Grade", 
+    y = "PM 2.5 Percentile (%)", 
+    title = "Average PM2.5 Percentile by LA County HOLC Grade",
+    fill = "HOLC Grade"
+  ) + 
   theme_classic()
+
 
 ```
 
@@ -168,12 +185,21 @@ if (any(holc_age$age_avg < 0 | holc_age$age_avg > 100)) {
 ```{r}
 # Observe percentile low life expectancy difference between grades
 holc_pm %>% 
-ggplot(aes(x = grade, y = pm_avg)) +
-  geom_col(fill = "lightblue") +
-  labs( x = "HOLC Grade", 
-        y = "Low Life Expectancy Percentile (%)", 
-        title = "Average Low Life Expectancy by LA County HOLC Grade") + 
+  ggplot(aes(x = grade, y = pm_avg, fill = grade)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    "A" = "darkgreen",
+    "B" = "lightblue",
+    "C" = "#FFC067",
+    "D" = "#FA8072")) +
+  labs(
+    x = "HOLC Grade", 
+    y = "Low Life Expectancy Percentile (%)", 
+    title = "Average Low Life Expectancy by LA County HOLC Grade", 
+    fill = "HOLC Grade"
+  ) + 
   theme_classic()
+
 ```
 
 The damaging legacy of redlining is apparent across LA County communities. Low-grade neighborhoods, compared to high-grade neighborhoods, tend to have lower income averages, lower life expectancy averages, and are exposed to more particulate matter <= 2.5 microns on average. 
@@ -234,13 +260,13 @@ ggplot(bird_obs_grade, aes(x = "Bird Observations",
                            fill = grade)) +
   geom_bar(stat = "identity", width = 0.6) +
   labs(
-    title = "Proportion of Bird Observations by HOLC Grade",
+    title = "Proportion of Bird Observations Across HOLC Graded Neighborhoods in Los Angeles County",
      x = NULL, # Remove x from axis label
     y = "Percent of Total Bird Observations (%)",
     fill = "HOLC Grade") +
   scale_fill_manual(values = c("darkgreen",
                                "lightgreen",
-                               "#FCF4A3",
+                               "#FFC067",
                                "#FA8072")) +
   theme_classic()
 
